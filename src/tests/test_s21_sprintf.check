@@ -1,0 +1,2442 @@
+#include <stdio.h>
+#include <limits.h>
+
+#include "../s21_sprintf.h"
+#include "../s21_string.h"
+#include "../s21_errlist.h"
+
+// CHAR TESTS
+
+#test test_s21_sprintf_c_1
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  int a = 9;
+  int b = 10;
+  int c = 17;
+  int d = 66;
+  int e = 124;
+  ck_assert_int_eq(sprintf(str1, str3, a, b, c, d, e), s21_sprintf(str2, str3, a, b, c, d, e));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_c_2
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  int a = -6;
+  int b = -10;
+  int c = -17;
+  int d = -66;
+  int e = -124;
+  ck_assert_int_eq(sprintf(str1, str3, a, b, c, d, e), s21_sprintf(str2, str3, a, b, c, d, e));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_c_3
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  int a = 60;
+  int b = 50;
+  int c = 1744;
+  int d = 386;
+  int e = 257;
+  ck_assert_int_eq(sprintf(str1, str3, a, b, c, d, e), s21_sprintf(str2, str3, a, b, c, d, e));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_c_4
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  int a = 60;
+  int b = 50;
+  int c = 1744;
+  int d = 386;
+  int e = 257;
+  ck_assert_int_eq(sprintf(str1, str3, a, b, c, d, e), s21_sprintf(str2, str3, a, b, c, d, e));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_c_5
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%05c Test % 5c Test %lc Test";
+  int a = 70;
+  unsigned long int b = 70;
+  ck_assert_int_eq(sprintf(str1, str3, a, a, b), s21_sprintf(str2, str3, a, a, b));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_c_6
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%+010.5c Test % +10.5c Test %-10lc Test %-10lc Test %+10lc";
+  char a = 92;
+  unsigned long int b = 92;
+  unsigned long int c = 92;
+  ck_assert_int_eq(sprintf(str1, str3, a, a, b, c, c), s21_sprintf(str2, str3, a, a, b, c, c));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_c_7
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%6.4c Test %-6.4c Test %4.10lc Test %-4.10lc Test %-0lc";
+  int a = 10;
+  unsigned long int b = 10;
+  unsigned long int c = 10;
+  ck_assert_int_eq(sprintf(str1, str3, a, a, b, c, c), s21_sprintf(str2, str3, a, a, b, c, c));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_c_8
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%6.4c Test %-6.4c Test %4.10lc Test %-4.10lc Test %-0lc";
+  int a = -10;
+  unsigned long int b = 10;
+  unsigned long int c = 10;
+  ck_assert_int_eq(sprintf(str1, str3, a, a, b, c, c), s21_sprintf(str2, str3, a, a, b, c, c));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_c_9
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%#c Test %#c Test %#c Test %#c Test %#c";
+  ck_assert_int_eq(sprintf(str1, str3, ' ', 'n', '5', '%', '\\'), s21_sprintf(str2, str3, ' ', 'n', '5', '%', '\\'));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_c_10
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "%.7c Test %-7c Test %-50c Test % 54c Test %0188c";
+  int a = 112;
+  ck_assert_int_eq(sprintf(str1, str3, a, a, a, a, a), s21_sprintf(str2, str3, a, a, a, a, a));
+
+#test test_s21_sprintf_c_11
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%c Test %lc Test %hc";
+  int a = 3;
+  unsigned long int b = 103;
+  unsigned short e = 255;
+  ck_assert_int_eq(sprintf(str1, str3, a, b, e), s21_sprintf(str2, str3, a, b, e));
+  ck_assert_pstr_eq(str1, str2);
+
+// SIGNED TESTS
+
+#test test_s21_sprintf_signed_1
+  char str1[100] = "";
+  char str2[100] = "";
+  char *str3 = "Test %d Test";
+  int val = -12;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_2
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%d Test %d Test %d";
+  int val = 012;
+  int val2 = -017;
+  int val3 = 07464;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_3
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%d Test %d Test %d";
+  int val = 3015;
+  int val2 = 712;
+  int val3 = 99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_4
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%ld Test %ld Test %hd GOD %hd";
+  long int val = 3088675747373646;
+  long val2 = 33030030303;
+  short int val3 = 22600;
+  short val4 = -120;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_5
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%3d Test %5d Test %10d";
+  int val = -3015;
+  int val2 = -11234;
+  int val3 = -99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_6
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%6.5d Test %.23d Test %3.d TEST %.d %.6d";
+  int val = -3015;
+  int val2 = -712;
+  int val3 = -99;
+  int val4 = -38;
+  int val5 = -100;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_7
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%-10.5d Test %-.8d Test %-7d TEST %-.d";
+  int val = -3015;
+  int val2 = -712;
+  int val3 = -99;
+  int val4 = -2939;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_8
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%0d Test %0.d Test %0.0d TEST %0d GOD %.d";
+  int val = -3015;
+  int val2 = -712;
+  int val3 = -99;
+  int val4 = -2939;
+  int val5 = -0123;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_9
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%+d Test %+3.d Test %+5.7d TEST %+10d";
+  int val = -3015;
+  int val2 = -712;
+  int val3 = -99;
+  int val4 = -2939;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_10
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "% d Test % 3.d Test % 5.7d TEST % 10d GOD %.d";
+  int val = -32;
+  int val2 = -8899;
+  int val3 = -91918;
+  int val4 = -32311;
+  int val5 = -23;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_11
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%+d Test %+3.d Test %+5.7d TEST %+10d GOD %+.d";
+  int val = -32;
+  int val2 = -8899;
+  int val3 = 91918;
+  int val4 = -32311;
+  int val5 = 3261;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_12
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%#d Test %#3d Test %#5.7d TEST %#.7d Oof %#.d";
+  int val = -32;
+  int val2 = 8899;
+  int val3 = -91918;
+  int val4 = 32311;
+  int val5 = -8894;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_13
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%0d Test %06d Test %05.7d TEST %0.7d Oof %0.d";
+  int val = -32;
+  int val2 = 8899;
+  int val3 = -91918;
+  int val4 = -32311;
+  int val5 = -8894;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_14
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%*d Test %-*d Test %*.*d TEST %.*d";
+  int val = 32;
+  int val2 = 8899;
+  int val3 = -919;
+  int val4 = 32311;
+  int ast = 2;
+  int ast2 = 5;
+  int ast3 = 4;
+  int ast4 = 10;
+  int ast5 = 7;
+  ck_assert_int_eq(sprintf(str1, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4), s21_sprintf(str2, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_15
+  char str1[100] = "";
+  char str2[100] = "";
+  char *str3 = "%d";
+  int val = 12;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_16
+  char str1[1024] = "";
+  char str2[1024] = "";
+  int val = -75;
+ s21_sprintf(str1, "Hello %d %023d", val, val);
+  s21_sprintf(str2, "Hello %d %023d", val, val);
+  ck_assert_str_eq(str1, str2);
+
+#test test_s21_sprintf_signed_17
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%- d Test %- 15d sdasda %- 15d sdsad %- d";
+  int val = -3231;
+  int val2 = -3231;
+  int val3 = 3231;
+  int val4 = 3231;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_signed_18
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%- lld Test %- 15lld sdasda %- 15lld sdsad %- lld";
+  long long val = -9223372036854775807;
+  long long val2 = -9223372036854775807;
+  long long val3 = 9223372036854775807;
+  long long val4 = 9223372036854775807;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+// FLOAT TESTS
+
+#test test_s21_sprintf_f_1
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%f TEST %.f TEST %4f TEST %4.f TEST %5.10f!";
+  double num = 76.756589367;
+  ck_assert_int_eq(sprintf(str1, str3, num, num, num, num, num), s21_sprintf(str2, str3, num, num, num, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_2
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "%Lf\n%.Lf\n%+-#Lf\n%+#.Lf\n%-#.Lf!";
+  long double num = 76.756589;
+  ck_assert_int_eq(sprintf(str1, str3, num, num, num, num, num), s21_sprintf(str2, str3, num, num, num, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_3
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: %5f\ntest: %6.1f\ntest: %8.2f!";
+  double num = 76.756589;
+  ck_assert_int_eq(sprintf(str1, str3, num, num, num), s21_sprintf(str2, str3, num, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_4
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: %10.5f\ntest: %12.4f!";
+  double num = 76.756589;
+  ck_assert_int_eq(sprintf(str1, str3, num, num), s21_sprintf(str2, str3, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_5
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: %15.13f!\ntest: %26.15f!";
+  double num = 365289.34628654873789362746834;
+  ck_assert_int_eq(sprintf(str1, str3, num, num), s21_sprintf(str2, str3, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_6
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: %18.7f!\ntest: %10.15f!";
+  double num = 365289.34628654873789362746834;
+  ck_assert_int_eq(sprintf(str1, str3, num, num), s21_sprintf(str2, str3, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_7
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: %- 23.14f!\ntest: %+ 25.15f!";
+  double num = 365289.34628654873789362746834;
+  ck_assert_int_eq(sprintf(str1, str3, num, num), s21_sprintf(str2, str3, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_8
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: % 14f!\ntest: % -27f!\ntest: %- 19f!";
+  double num = 365789.34;
+  ck_assert_int_eq(sprintf(str1, str3, num, num, num), s21_sprintf(str2, str3, num, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_9
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: %+- 16f!\ntest: %+ 44f!\ntest: % +35f!";
+  double num = 365789.34;
+  ck_assert_int_eq(sprintf(str1, str3, num, num, num), s21_sprintf(str2, str3, num, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_10
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: % 15.1Lf!\ntest: % -26.15Lf!\ntest: %- 30.15Lf!";
+  long double num = 278.723786;
+  ck_assert_int_eq(sprintf(str1, str3, num, num, num), s21_sprintf(str2, str3, num, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_11
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: %+ 50.15Lf!\ntest: % +40.15Lf!";
+  long double num = 278.723786;
+  ck_assert_int_eq(sprintf(str1, str3, num, num), s21_sprintf(str2, str3, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_12
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: %.1Lf!\ntest: %.2Lf!\ntest: %.3Lf!";
+  long double num = 000000000000000.00000000000;
+  ck_assert_int_eq(sprintf(str1, str3, num, num, num), s21_sprintf(str2, str3, num, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_13
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "test: %.6Lf!\ntest: %.Lf\ntest: %+ 0Lf!!";
+  long double num = 000000000000000.00000000000;
+  ck_assert_int_eq(sprintf(str1, str3, num, num, num), s21_sprintf(str2, str3, num, num, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_14
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "fshgkaljck% 10.12f hgsakul";
+  double num = 0.235300;
+  ck_assert_int_eq(sprintf(str1, str3, num), s21_sprintf(str2, str3, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_15
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "%f";
+  double num = nan("NaN");
+  ck_assert_int_eq(sprintf(str1, str3, num), s21_sprintf(str2, str3, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_16
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "%f";
+  double num = INFINITY;
+  ck_assert_int_eq(sprintf(str1, str3, num), s21_sprintf(str2, str3, num));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_f_17
+  char str1[400] = {0};
+  char str2[400] = {0};
+  char *str3 = "%f";
+  double num = -INFINITY;
+  ck_assert_int_eq(sprintf(str1, str3, num), s21_sprintf(str2, str3, num));
+  ck_assert_pstr_eq(str1, str2);
+
+// UNSIGNED TESTS
+
+#test test_s21_sprintf_unsigned_1
+  char str1[100] = "";
+  char str2[100] = "";
+  char *str3 = "Test %u Test";
+  unsigned int val = 012;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_2
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%u Test %u Test %u";
+  unsigned int val = 012;
+  unsigned int val2 = 017;
+  unsigned int val3 = 07464;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_3
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%u Test %u Test %u";
+  unsigned int val = 3015;
+  unsigned int val2 = 712;
+  unsigned int val3 = 99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_4
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%lu Test %lu Test %hu GOD %hu";
+  long unsigned int val = 3088675747373646;
+  long unsigned val2 = 33030030303;
+  unsigned short val3 = 22600;
+  unsigned short val4 = 120;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_5
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%3u Test %5u Test %10u";
+  unsigned int val = 3015;
+  unsigned int val2 = 01234;
+  unsigned int val3 = 99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_6
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%6.5u Test %.23u Test %3.u TEST %.u";
+  unsigned int val = 3015;
+  unsigned int val2 = 712;
+  unsigned int val3 = 99;
+  unsigned int val4 = 38;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_7
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%-10.5u Test %-.8u Test %-7u TEST %-.u";
+  unsigned int val = 3015;
+  unsigned int val2 = 712;
+  unsigned int val3 = 99;
+  unsigned int val4 = 2939;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_8
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%0u Test %0.u Test %0.0u TEST %0u GOD %.u";
+  unsigned int val = 3015;
+  unsigned int val2 = 712;
+  unsigned int val3 = 99;
+  unsigned int val4 = 2939;
+  unsigned int val5 = 0123;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_9
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%+u Test %+3.u Test %+5.7u TEST %+10u";
+  unsigned int val = 3015;
+  unsigned int val2 = 712;
+  unsigned int val3 = 99;
+  unsigned int val4 = 2939;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_10
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "% u Test % 3.u Test % 5.7u TEST % 10u GOD %.u";
+  unsigned int val = 32;
+  unsigned int val2 = 8899;
+  unsigned int val3 = 91918;
+  unsigned int val4 = 32311;
+  unsigned int val5 = 23;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_11
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%+u Test %+3.u Test %+5.7u TEST %+10u GOD %+.u";
+  unsigned int val = 32;
+  unsigned int val2 = 8899;
+  unsigned int val3 = 91918;
+  unsigned int val4 = 32311;
+  unsigned int val5 = 3261;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_12
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%#u Test %#3u Test %#5.7u TEST %#.7u Ouf %#.u";
+  unsigned int val = 32;
+  unsigned int val2 = 8899;
+  unsigned int val3 = 91918;
+  unsigned int val4 = 32311;
+  unsigned int val5 = 8894;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_13
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%0u Test %06u Test %05.7u TEST %0.7u Ouf %0.u";
+  unsigned int val = 32;
+  unsigned int val2 = 8899;
+  unsigned int val3 = 91918;
+  unsigned int val4 = 32311;
+  unsigned int val5 = 8894;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_14
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%*u Test %-*u Test %*.*u TEST %.*u";
+  unsigned int val = 32;
+  unsigned int val2 = 8899;
+  unsigned int val3 = 919;
+  unsigned int val4 = 32311;
+  unsigned int ast = 2;
+  unsigned int ast2 = 5;
+  unsigned int ast3 = 4;
+  unsigned int ast4 = 10;
+  unsigned int ast5 = 7;
+  ck_assert_int_eq( sprintf(str1, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4), s21_sprintf(str2, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_15
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%- u Test %- 15u sdasda %- 15u sdsad %- u";
+  unsigned int val = -3231;
+  unsigned int val2 = -3231;
+  unsigned int val3 = 3231;
+  unsigned int val4 = 3231;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_unsigned_16
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%- 15llu sdsad %- llu";
+  unsigned long long int val = 9223372036854775807;
+  unsigned long long int val2 = 9223372036854775807;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2), s21_sprintf(str2, str3, val, val2));
+  ck_assert_pstr_eq(str1, str2);
+
+// HEX TESTS
+
+#test test_s21_sprintf_hex_1
+  char str1[100] = "";
+  char str2[100] = "";
+  char *str3 = "Test %x Test";
+  int val = 0x32;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_2
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%x Test %x Test %x";
+  int val = 0x7a4;
+  int val2 = 0x91ba123f;
+  int val3 = 0x3123;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_3
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%x Test %x Test %x";
+  int val = 0x3015;
+  int val2 = 0x712;
+  int val3 = 0x99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_4
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%lx Test %lx Test %hx GOD %hx";
+  long int val = 3088675747373646;
+  long val2 = 33030030303;
+  unsigned short int val3 = 22600;
+  unsigned short val4 = 120;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_5
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%3x Test %5x Test %10x";
+  int val = 3015;
+  int val2 = 01234;
+  int val3 = 99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_6
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%0x Test %0.x Test %0.0x TEST %0x GOD %.x";
+  int val = 3015;
+  int val2 = 712;
+  int val3 = 99;
+  int val4 = 2939;
+  int val5 = 0123;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_7
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%- x Test %- 15x sdasda %- 15x sdsad %- x";
+  int val = -3231;
+  int val2 = -3231;
+  int val3 = 3231;
+  int val4 = 3231;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_8
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "fdsdsds %lx";
+  long int val = ULONG_MAX;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_9
+  char str1[100] = "";
+  char str2[100] = "";
+  char *str3 = "Test %X Test";
+  int val = 0X32;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_10
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%X Test %X Test %X";
+  int val = 0X7a4;
+  int val2 = 0X9112312f;
+  int val3 = 0X3123;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_11
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%X Test %X Test %X";
+  int val = 0X3015;
+  int val2 = 0X712;
+  int val3 = 0X99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_12
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%lX Test %lX Test %hX GOD %hX";
+  unsigned long int val = 3088675747373646;
+  unsigned long int val2 = 33030030303;
+  unsigned short int val3 = 22600;
+  unsigned short val4 = 120;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_13
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%3X Test %5X Test %10X";
+  int val = 3015;
+  int val2 = 01234;
+  int val3 = 99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_14
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%0X Test %0.X Test %0.0X TEST %0X GOD %.X";
+  int val = 3015;
+  int val2 = 712;
+  int val3 = 99;
+  int val4 = 2939;
+  int val5 = 0123;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_15
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%- X Test %- 15X sdasda %- 15X sdsad %- X";
+  int val = -3231;
+  int val2 = -3231;
+  int val3 = 3231;
+  int val4 = 3231;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_hex_16
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%-#X Test %-#15X sdasda %-#15X sdsad %-#X";
+  int val = -3231;
+  int val2 = -3231;
+  int val3 = 3231;
+  int val4 = 3231;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+// OCTAL TESTS
+
+#test test_s21_sprintf_oct_1
+  char str1[100] = "";
+  char str2[100] = "";
+  char *str3 = "Test %o Test";
+  int val = 012;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_2
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%o Test %o Test %o";
+  int val = 012;
+  int val2 = 017;
+  int val3 = 07464;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_3
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%o Test %o Test %o";
+  int val = 3015;
+  int val2 = 712;
+  int val3 = 99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_4
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%lo Test %lo Test %ho GOD %ho";
+  long int val = 3088675747373646;
+  unsigned long int val2 = 33030030303;
+  unsigned short int val3 = 22600;
+  unsigned short val4 = 120;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_5
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%3o Test %5o Test %10o";
+  int val = 3015;
+  int val2 = 01234;
+  int val3 = 99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_6
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%6.5o Test %.23o Test %3.o TEST %.o";
+  int val = 3015;
+  int val2 = 712;
+  int val3 = 99;
+  int val4 = 38;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_7
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%-10.5o Test %-.8o Test %-7o TEST %-.o";
+  int val = 3015;
+  int val2 = 712;
+  int val3 = 99;
+  int val4 = 2939;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_8
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%0o Test %0.o Test %0.0o TEST %0o GOD %.o";
+  int val = 3015;
+  int val2 = 712;
+  int val3 = 99;
+  int val4 = 2939;
+  int val5 = 0123;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_9
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%+o Test %+3.o Test %+5.7o TEST %+10o";
+  int val = 3015;
+  int val2 = 712;
+  int val3 = 99;
+  int val4 = 2939;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_10
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "% o Test % 3.o Test % 5.7o TEST % 10o GOD %.o";
+  int val = 32;
+  int val2 = 8899;
+  int val3 = 91918;
+  int val4 = 32311;
+  int val5 = 23;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_11
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%+o Test %+3.o Test %+5.7o TEST %+10o GOD %+.o";
+  int val = 32;
+  int val2 = 8899;
+  int val3 = 91918;
+  int val4 = 32311;
+  int val5 = 3261;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_12
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%#o Test %#3o Test %#5.7o TEST %#.7o Oof %#.o";
+  int val = 32;
+  int val2 = 8899;
+  int val3 = 91918;
+  int val4 = 32311;
+  int val5 = 8894;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_13
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%*o Test %-*o Test %*.*o TEST %.*o";
+  int val = 32;
+  int val2 = 8899;
+  int val3 = 919;
+  int val4 = 32311;
+  int ast = 2;
+  int ast2 = 5;
+  int ast3 = 4;
+  int ast4 = 10;
+  int ast5 = 7;
+  ck_assert_int_eq(sprintf(str1, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4), s21_sprintf(str2, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_oct_14
+  char str1[100] = "";
+  char str2[100] = "";
+  char *str3 = "%o";
+  int val = 012;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+ 
+#test test_s21_sprintf_oct_15
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%- o Test %- 15o sdasda %- 15o sdsad %- o";
+  int val = -3231;
+  int val2 = -3231;
+  int val3 = 3231;
+  int val4 = 3231;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+ 
+#test test_s21_sprintf_oct_16
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "fdsdsds %lo";
+  long int val = ULONG_MAX;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+ 
+// POINTER TESTS
+
+#test test_s21_sprintf_ptr_1
+  char str1[100] = "";
+  char str2[100] = "";
+  char* str3 = "Test %p Test";
+  char* val = "0p32";
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_2
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char* str3 = "%p Test %p Test %p";
+  char* val = "0p7a4";
+  char* val2 = "0p91ba123f";
+  char* val3 = "0p3123";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_3
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char* str3 = "%p Test %p Test %p";
+  char* val = "0p3015";
+  char* val2 = "0p712";
+  char* val3 = "0p99";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_4
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char* str3 = "%p Test %p Test %p GOD %p";
+  long int* val = (void*)3088675747373646;
+  long long int* val2 = (void*)33030030303;
+  unsigned short int* val3 = (void*)22600;
+  unsigned char* val4 = (void*)120;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_5
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char* str3 = "%3p Test %5p Test %12p";
+  char* val = "3015";
+  char* val2 = "01234";
+  char* val3 = "99";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3), s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_6
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char* str3 = "%-10.5p Test %-.4p Test %-16p TEST %-.5p";
+  char* val = "3015";
+  char* val2 = "712";
+  char* val3 = "99";
+  char* val4 = "2939";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_7
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char* str3 = "%0p Test %0.p Test %0.0p TEST %0p GOD %.p";
+  char* val = "3015";
+  char* val2 = "712";
+  char* val3 = "99";
+  char* val4 = "2939";
+  char* val5 = "0123";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_8
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char* str3 = "%+p Test %+3.p Test %+5.7p TEST %+10p";
+  char* val = "3015";
+  char* val2 = "712";
+  char* val3 = "99";
+  char* val4 = "2939";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4), s21_sprintf(str2, str3, val, val2, val3, val4));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_9
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char* str3 = "% p Test % 3.p Test % 5.7p TEST % 10p GOD %.p";
+  char* val = "32";
+  char* val2 = "8899";
+  char* val3 = "91918";
+  char* val4 = "32311";
+  char* val5 = "23";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_10
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char* str3 = "%+p Test %+3.p Test %+5.7p TEST %+10p GOD %+.p";
+  char* val = "32";
+  char* val2 = "8899";
+  char* val3 = "91918";
+  char* val4 = "32311";
+  char* val5 = "3261";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_11
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char* str3 = "%#p Test %#3p Test %#5.7p TEST %#.7p Oof %#.p";
+  char* val = "32";
+  char* val2 = "8899";
+  char* val3 = "91918";
+  char* val4 = "32311";
+  char* val5 = "8894";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_ptr_12
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char* str3 = "%0p Test %06p Test %05.7p TEST %0.7p Oof %0.p";
+  char* val = "32";
+  char* val2 = "8899";
+  char* val3 = "91918";
+  char* val4 = "32311";
+  char* val5 = "8894";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5), s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  ck_assert_pstr_eq(str1, str2);
+
+// STRING TESTS
+
+#test test_s21_sprintf_str_1
+  char str1[100] = "";
+  char str2[100] = "";
+  char *str3 = "Test %s Test";
+  char *val = "Why am I here?!";
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_str_2
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%s Test %s Test %s";
+  char *val = "I'm so tired";
+  char *val2 = "Who invented this?";
+  char *val3 = "This project gave me hemmoroids";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_str_3
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%s Test %s Test %s";
+  char *val = "Don't need this test";
+  char *val2 = "Just for the kicks";
+  char *val3 = "Lol";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_str_4
+  char str1[200] = {0};
+  char str2[200] = {0};
+  char *str3 = "%3s Test %5s Test %10s";
+  char *val = "WHAT IS THIS";
+  char *val2 = "i don't care anymore";
+  char *val3 = "PPAP";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_str_5
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%s %s %s %% %d";
+  char *val = "This";
+  char *val2 = "\0";
+  int val3 = 65;
+  char *val4 = "string";
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val4, val3),s21_sprintf(str2, str3, val, val2, val4, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+// PERCENT TESTS
+
+#test test_s21_sprintf_percent_1
+  char str1[100] = "";
+  char str2[100] = "";
+  char *str3 = "%%Test %o Test";
+  int val = 012;
+  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_percent_2
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "Test %o Tes%%%%t %o";
+  int val = 012;
+  int val2 = 017;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2),s21_sprintf(str2, str3, val, val2));
+  ck_assert_pstr_eq(str1, str2);
+
+#test test_s21_sprintf_percent_3
+  char str1[100] = {0};
+  char str2[100] = {0};
+  char *str3 = "%o Te%%st %o Test %o";
+  int val = 3015;
+  int val2 = 712;
+  int val3 = 99;
+  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),s21_sprintf(str2, str3, val, val2, val3));
+  ck_assert_pstr_eq(str1, str2);
+
+// MEMCHR TESTS
+
+#test test_s21_memchr_1
+  char str[] = "Hello, world!";
+  int ch = ' ';
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test test_s21_memchr_2
+  char str[] = "Hello, world!";
+  int ch = 101;
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test test_s21_memchr_3
+  char str[] = "Hello, world!";
+  int ch = '1';
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test test_s21_memchr_4
+  char str[] = "Hello, world!";
+  int ch = 65;
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test test_s21_memchr_5
+  char str[] = "Hello, world!";
+  int ch = 'l';
+  s21_size_t len = 10;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test test_s21_memchr_6
+  char str[] = "Hello, world!";
+  int ch = 'w';
+  s21_size_t len = 5;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test test_s21_memchr_7
+  char str[] = "69917020";
+  int ch = '3';
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test test_s21_memchr_8
+  char str[] = "69917020";
+  int ch = '6';
+  s21_size_t len = 0;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test test_s21_memchr_10
+  char str[] = "69917020";
+  int ch = 'g';
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test test_s21_memchr_11
+  char str[] = "69917020";
+  int ch = '\0';
+  s21_size_t len = 9;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+// MEMCMP TESTS
+
+#test test_s21_memcmp_1
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  s21_size_t n = 7;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_2
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  s21_size_t n = 13;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_3
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  s21_size_t n = 0;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_4
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  s21_size_t n = 14;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_5
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  s21_size_t n = 14;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_6
+  char s1[] = "69917020";
+  char s2[] = "69917020";
+  s21_size_t n = 0;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_7
+  char s1[] = "69917020";
+  char s2[] = "69917020";
+  s21_size_t n = 2;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_8
+  char s1[] = "69917020";
+  char s2[] = "69917020";
+  s21_size_t n = 8;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_9
+  char s1[] = "69917020";
+  char s2[] = "69917020";
+  s21_size_t n = 9;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_10
+  char s1[] = "69917020";
+  char s2[] = "6991702H";
+  s21_size_t n = 7;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_11
+  char s1[] = "69917020";
+  char s2[] = "6991702H";
+  s21_size_t n = 4;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_12
+  char s1[] = "69917020";
+  char s2[] = "6991702H";
+  s21_size_t n = 8;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_13
+  char s1[] = "69917020";
+  char s2[] = "6991702H";
+  s21_size_t n = 9;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_memcmp_14
+  char s1[] =
+      "The memcmp() function compares the first n bytes (each interpreted as "
+      "unsigned char) of the memory areas s1 and s2.";
+  char s2[] =
+      "The memcmp() function compares the first n bytes (each interpreted as "
+      "unsigned char) of the memory areas s1 and s2.";
+  s21_size_t n = 115;
+  int n1 = memcmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_memcmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+// MEMCPY TESTS
+
+#test test_s21_memcpy_1
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  char s3[] = "Good";
+  s21_size_t n = 4;
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+#test test_s21_memcpy_2
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  char s3[] = "\0";
+  s21_size_t n = 1;
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+#test test_s21_memcpy_3
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  char s3[] = "f";
+  s21_size_t n = 0;
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+#test test_s21_memcpy_4
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  char s3[] = "Hi";
+  s21_size_t n = 3;
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+#test test_s21_memcpy_5
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  char s3[] = "Hi";
+  s21_size_t n = 2;
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+#test test_s21_memcpy_6
+  char s1[] = "";
+  char s2[] = "";
+  char s3[] = "love";
+  s21_size_t n = 0;
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+#test test_s21_memcpy_7
+  char s1[] = "new_strnew_string";
+  char s2[] = "new_strnew_string";
+  char s3[] = "new_string";
+  s21_size_t n = strlen(s3);
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+#test test_s21_memcpy_8
+  char s1[] = "699\017020";
+  char s2[] = "699\017020";
+  char s3[] = "com";
+  s21_size_t n = 3;
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+#test test_s21_memcpy_9
+  char s1[] = "69917020";
+  char s2[] = "69917020";
+  char s3[] = "c";
+  s21_size_t n = 1;
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+#test test_s21_memcpy_10
+  char s1[] = "69917020";
+  char s2[] = "69917020";
+  char s3[] = "com";
+  s21_size_t n = 3;
+  ck_assert_str_eq(memcpy(s1, s3, n), s21_memcpy(s2, s3, n));
+
+// MEMSET TESTS
+
+#test test_s21_memset_1
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  int ch = ' ';
+  s21_size_t n = strlen(s1);
+  ck_assert_str_eq(memset(s1, ch, n), s21_memset(s2, ch, n));
+
+#test test_s21_memset_2
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  int ch = ' ';
+  s21_size_t n = 5;
+  ck_assert_str_eq(memset(s1, ch, n), s21_memset(s2, ch, n));
+
+#test test_s21_memset_3
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  int ch = ' ';
+  s21_size_t n = 0;
+  ck_assert_str_eq(memset(s1, ch, n), s21_memset(s2, ch, n));
+
+#test test_s21_memset_4
+  char s1[] = "";
+  char s2[] = "";
+  int ch = '\0';
+  s21_size_t n = 0;
+  ck_assert_str_eq(memset(s1, ch, n), s21_memset(s2, ch, n));
+
+#test test_s21_memset_5
+  char s1[] = "Hello";
+  char s2[] = "Hello";
+  int ch = '\0';
+  s21_size_t n = 4;
+  ck_assert_str_eq(memset(s1, ch, n), s21_memset(s2, ch, n));
+
+#test test_s21_memset_6
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  int ch = 80;
+  s21_size_t n = 7;
+  ck_assert_str_eq(memset(s1, ch, n), s21_memset(s2, ch, n));
+
+// STRNCAT TESTS
+
+#test test_s21_strncat_1
+  char s1[30] = "Hello, world!";
+  char s2[30] = "Hello, world!";
+  char s3[] = "Hello, world!";
+  s21_size_t n = 1;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_2
+  char s1[30] = "Hello, world!";
+  char s2[30] = "Hello, world!";
+  char s3[] = "\0";
+  s21_size_t n = 1;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_3
+  char s1[30] = "Hello, world!";
+  char s2[30] = "Hello, world!";
+  char s3[] = "\n\0\\d\f\\g\7";
+  s21_size_t n = 3;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_4
+  char s1[30] = "Hello, world!";
+  char s2[30] = "Hello, world!";
+  char s3[] = "";
+  s21_size_t n = 0;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_5
+  char s1[30] = "";
+  char s2[30] = "";
+  char s3[] = "Hello, world!";
+  s21_size_t n = 13;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_6
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] =
+      "My name is Arseniy. I hate this, maybe I'm not supposed for this.";
+  s21_size_t n = 6;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_7
+  char s1[30] = "";
+  char s2[30] = "";
+  char s3[] = "Hello, world!";
+  s21_size_t n = 3;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_8
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "My name is Arseniy.";
+  s21_size_t n = 2;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_9
+  char s1[100] = "";
+  char s2[100] = "";
+  char s3[] = "";
+  s21_size_t n = 10;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_10
+  char s1[100] = "Hello\0, world!";
+  char s2[100] = "Hello\0, world!";
+  char s3[] = "My name is\0 Arseniy.";
+  s21_size_t n = 15;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_11
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "\0";
+  s21_size_t n = 1;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_12
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "\0";
+  s21_size_t n = 0;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_13
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "\0\0\0\0";
+  s21_size_t n = 4;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_14
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "";
+  s21_size_t n = 2;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+#test test_s21_strncat_15
+  char s1[100] = "Hello, world!\0\0\0";
+  char s2[100] = "Hello, world!\0\0\0";
+  char s3[] = "My name is Arseniy.";
+  s21_size_t n = 0;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
+
+// STRCHR TESTS
+
+#test test_s21_strchr_1
+  char s[] = "Hello, world!";
+  int ch = 'h';
+  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+
+#test test_s21_strchr_2
+  char s[] = "Hello, world!";
+  int ch = '\0';
+  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+
+#test test_s21_strchr_3
+  char s[] = "Hello, world!";
+  int ch = ',';
+  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+
+#test test_s21_strchr_4
+  char s[] = "Hello, world!";
+  int ch = 33;
+  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+
+#test test_s21_strchr_5
+  char s[] = "Hello, Arseniy!";
+  int ch = 'P';
+  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+
+#test test_s21_strchr_6
+  char s[] = "Hello, world!";
+  int ch = 'w';
+  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+
+#test test_s21_strchr_7
+  char s[] = "Hello, world!";
+  int ch = '0';
+  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+
+#test test_s21_strchr_8
+  char s[] = "Hello, world!";
+  int ch = 'm';
+  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+
+// STRNCMP TESTS
+
+#test test_s21_strncmp_1
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  s21_size_t n = 14;
+  int n1 = strncmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_strncmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_strncmp_2
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, worldj";
+  s21_size_t n = 14;
+  int n1 = strncmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_strncmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_strncmp_3
+  char s1[] = "";
+  char s2[] = "";
+  s21_size_t n = 1;
+  int n1 = strncmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_strncmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_strncmp_4
+  char s1[] = "f";
+  char s2[] = "";
+  s21_size_t n = 1;
+  int n1 = strncmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_strncmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_strncmp_5
+  char s1[] = "";
+  char s2[] = "j";
+  s21_size_t n = 1;
+  int n1 = strncmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_strncmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_strncmp_6
+  char s1[] = "1242434246364377659";
+  char s2[] = "1242434246364377659";
+  s21_size_t n = 19;
+  int n1 = strncmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_strncmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_strncmp_7
+  char s1[] = "1242434246364377659";
+  char s2[] = "1242434246364377659";
+  s21_size_t n = 2;
+  int n1 = strncmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_strncmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_strncmp_8
+  char s1[] = "g124243425";
+  char s2[] = "124243424";
+  s21_size_t n = 0;
+  int n1 = strncmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_strncmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+#test test_s21_strncmp_9
+  char s1[] = "";
+  char s2[] = "";
+  s21_size_t n = 1;
+  int n1 = strncmp(s1, s2, n);
+  n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
+  int n2 = s21_strncmp(s1, s2, n);
+  n2 = n2 > 0 ? 1 : n2 == 0 ? 0 : -1;
+  ck_assert_int_eq(n1, n2);
+
+// STRNCPY TESTS
+
+#test test_s21_strncpy_1
+  char s1[20] = "Hello, world!";
+  char s2[20] = "Hello, world!";
+  char s3[] = "Good";
+  s21_size_t n = 5;
+  ck_assert_pstr_eq(strncpy(s1, s3, n), s21_strncpy(s2, s3, n));
+
+#test test_s21_strncpy_2
+  char s1[20] = "Hello, world!";
+  char s2[20] = "Hello, world!";
+  char s3[] = "\0";
+  s21_size_t n = 1;
+  ck_assert_pstr_eq(strncpy(s1, s3, n), s21_strncpy(s2, s3, n));
+
+#test test_s21_strncpy_3
+  char s1[30] = "Hello, world!";
+  char s2[30] = "Hello, world!";
+  char s3[] = "fг-аг-аг";
+  s21_size_t n = 1;
+  ck_assert_pstr_eq(strncpy(s1, s3, n), s21_strncpy(s2, s3, n));
+
+#test test_s21_strncpy_4
+  char s1[5] = "";
+  char s2[5] = "";
+  char s3[] = "";
+  s21_size_t n = 0;
+  ck_assert_pstr_eq(strncpy(s1, s3, n), s21_strncpy(s2, s3, n));
+
+#test test_s21_strncpy_5
+  char s1[70] = "";
+  char s2[70] = "";
+  char s3[] =
+      "I hate doing tests, it's not funny at all!!!!!!!!!!!!!!!!!!!!!!!!!";
+  s21_size_t n = strlen(s3);
+  ck_assert_pstr_eq(strncpy(s1, s3, n), s21_strncpy(s2, s3, n));
+
+#test test_s21_strncpy_6
+  char s1[5] = "";
+  char s2[5] = "";
+  char s3[] = "\0";
+  s21_size_t n = 1;
+  ck_assert_pstr_eq(strncpy(s1, s3, n), s21_strncpy(s2, s3, n));
+
+// STRCSPN TESTS
+
+#test test_s21_strcspn_1
+  char s1[] =
+      "Hello, world!Hello, world!Hello, world!Hello, world!Hello, world!";
+  char s2[] = "Hello, world!";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_2
+  char s1[] =
+      "Hello, world!Hello, world!Hello, world!Hello, world!Hello, world!";
+  char s2[] =
+      "Hello, world!Hello, world!Hello, world!Hello, world!Hello, world!";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_3
+  char s1[] = "v";
+  char s2[] = "vendetta";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_4
+  char s1[] = "";
+  char s2[] = "Hello, world!";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_5
+  char s1[] = "Hello, world!";
+  char s2[] = "";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_6
+  char s1[] = "6";
+  char s2[] = "67";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_7
+  char s1[] = "69917020";
+  char s2[] = "69917020";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_8
+  char s1[] = "69917020";
+  char s2[] = "69917020";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_9
+  char s1[] = "699";
+  char s2[] = "69917020";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_10
+  char s1[] = "69917020";
+  char s2[] = "699";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_11
+  char s1[] = "";
+  char s2[] = "";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+#test test_s21_strcspn_12
+  char s1[] = "69917020";
+  char s2[] = "6991702H";
+  ck_assert_int_eq(strcspn(s1, s2), s21_strcspn(s1, s2));
+
+// STRERROR TESTS
+
+#test test_s21_strerror_1
+  for (int i = 0; i <= ERR_MAX; i++) {
+    ck_assert_str_eq(strerror(i), s21_strerror(i));
+  }
+
+#test test_s21_strerror_2
+  int n = -1;
+  ck_assert_str_eq(strerror(n), s21_strerror(n));
+
+// STRLEN TESTS
+
+#test test_s21_strlen_1
+  char str[] = "Hello, world!";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_2
+  char str[] =
+      "213145346758697808-9704=3524-1309876289403-5=6576=432=-31044253=60931 "
+      "21";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_3
+  char str[] = "Hello, world!";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_4
+  char str[] = "\0";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_5
+  char str[] =
+      "I hate doing tests, it's not funny at all!!!!!!!!!!!!!!!!!!!!!!!!!";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_6
+  char str[] = "";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_7
+  char str[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_8
+  char str[] = "          00000000           ......  ";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_9
+  char str[] = "\n\n\n\n\n\n\n\n\nlololol\n\n\n\n\n";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_10
+  char str[] = "\0\0\0\0\n";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_11
+  char str[] = "";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_12
+  char str[] = "\t\t";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_13
+  char str[] = "\0test";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+#test test_s21_strlen_14
+  char str[] = "wtf \0 wtf";
+  ck_assert_int_eq(strlen(str), s21_strlen(str));
+
+// STRPBRK TESTS
+
+#test test_s21_strpbrk_1
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  ck_assert_pstr_eq(strpbrk(s1, s2), s21_strpbrk(s1, s2));
+
+#test test_s21_strpbrk_2
+  char s1[] = "Hello, world!";
+  char s2[] = "!";
+  ck_assert_pstr_eq(strpbrk(s1, s2), s21_strpbrk(s1, s2));
+
+#test test_s21_strpbrk_3
+  char s1[] = "";
+  char s2[] = "He";
+  ck_assert_pstr_eq(strpbrk(s1, s2), s21_strpbrk(s1, s2));
+
+#test test_s21_strpbrk_4
+  char s1[] = "\0";
+  char s2[] = "";
+  ck_assert_pstr_eq(strpbrk(s1, s2), s21_strpbrk(s1, s2));
+
+#test test_s21_strpbrk_5
+  char s1[] = "";
+  char s2[] = "";
+  ck_assert_pstr_eq(strpbrk(s1, s2), s21_strpbrk(s1, s2));
+
+#test test_s21_strpbrk_6
+  char s1[] = "1242434246364377659";
+  char s2[] = "364377659";
+  ck_assert_pstr_eq(strpbrk(s1, s2), s21_strpbrk(s1, s2));
+
+// STRRCHR TESTS
+
+#test test_s21_strrchr_1
+  char s[] = "Hello, world!";
+  int ch = 'h';
+  ck_assert_pstr_eq(strrchr(s, ch), s21_strrchr(s, ch));
+
+#test test_s21_strrchr_2
+  char s[] = "Hello, world!";
+  int ch = '\0';
+  ck_assert_pstr_eq(strrchr(s, ch), s21_strrchr(s, ch));
+
+#test test_s21_strrchr_3
+  char s[] = "Hello, world!";
+  int ch = ',';
+  ck_assert_pstr_eq(strrchr(s, ch), s21_strrchr(s, ch));
+
+#test test_s21_strrchr_4
+  char s[] = "Hello, world!";
+  int ch = 33;
+  ck_assert_pstr_eq(strrchr(s, ch), s21_strrchr(s, ch));
+
+#test test_s21_strrchr_5
+  char s[] = "Hello, Arseniy!";
+  int ch = 'P';
+  ck_assert_pstr_eq(strrchr(s, ch), s21_strrchr(s, ch));
+
+#test test_s21_strrchr_6
+  char s[] = "Hello, world!";
+  int ch = 'w';
+  ck_assert_pstr_eq(strrchr(s, ch), s21_strrchr(s, ch));
+
+#test test_s21_strrchr_7
+  char s[] = "Hello, world!";
+  int ch = '0';
+  ck_assert_pstr_eq(strrchr(s, ch), s21_strrchr(s, ch));
+
+#test test_s21_strrchr_8
+  char s[] = "Hello, world!";
+  int ch = 'm';
+  ck_assert_pstr_eq(strrchr(s, ch), s21_strrchr(s, ch));
+
+// STRSTR TESTS
+
+#test test_s21_strstr_1
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, world!";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_2
+  char s1[] = "Hello, world!";
+  char s2[] = "Hello, P!";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_3
+  char s1[] = "Hello, world!";
+  char s2[] = "!";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_4
+  char s1[] =
+      "Hello, world!Hello, world!Hello, world!Hello, world!Hello, world!";
+  char s2[] = "world";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_5
+  char s1[] = "";
+  char s2[] = "";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_6
+  char s1[] = "Hello, world!";
+  char s2[] = "";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_7
+  char s1[] = "";
+  char s2[] = "Hello, P!";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_8
+  char s1[] = "69917020";
+  char s2[] = "0";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_9
+  char s1[] = "69917020";
+  char s2[] = "\0";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_10
+  char s1[] = "69917020";
+  char s2[] = "32859160 8v3489-74 tvc4y8719c n4[nqymu uv 4vm9cw";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_11
+  char s1[] = "1   345 345 345 345 345";
+  char s2[] = "345";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_12
+  char s1[] = "sususususpicioussusususpicious";
+  char s2[] = "susp";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+#test test_s21_strstr_13
+  char s1[] = "sus";
+  char s2[] = "suspi";
+  ck_assert_pstr_eq(strstr(s1, s2), s21_strstr(s1, s2));
+
+// STRTOK TESTS
+
+#test test_s21_strtok_1
+  char str[] = "Hello word";
+  const char delim[] = "word";
+  ck_assert_str_eq(s21_strtok(str, delim), strtok(str, delim));
+
+#test test_s21_strtok_2
+  char str[] = "Byyyratino";
+  const char delim[] = "ratino";
+  ck_assert_str_eq(s21_strtok(str, delim), strtok(str, delim));
+
+#test test_s21_strtok_3
+  char str[] = "Hello word!";
+  const char delim[] = "";
+  ck_assert_str_eq(s21_strtok(str, delim), strtok(str, delim));
+
+#test test_s21_strtok_4
+  char str[] = "He llo";
+  const char delim[] = " ";
+  ck_assert_str_eq(s21_strtok(str, delim), strtok(str, delim));
+
+#test test_s21_strtok_5
+  char str[] = "By Hello";
+  const char delim[] = "\0";
+  ck_assert_str_eq(s21_strtok(str, delim), strtok(str, delim));
+
+#test test_s21_strtok_6
+  char str[] = " \0";
+  const char delim[] = "Heloo 95645";
+  ck_assert_pstr_eq(s21_strtok(str, delim), strtok(str, delim));
+
+#test test_s21_strtok_7
+  char str[] = "1";
+  const char delim[] = "1";
+  ck_assert_pstr_eq(s21_strtok(str, delim), strtok(str, delim));
+
+#test test_s21_strtok_8
+  char str[] = "3";
+  const char delim[] = "4";
+  ck_assert_pstr_eq(s21_strtok(str, delim), strtok(str, delim));
+
+#test test_s21_strtok_9
+  char str[] = "00";
+  const char delim[] = "00";
+  ck_assert_pstr_eq(s21_strtok(str, delim), strtok(str, delim));
+
+#test test_s21_strtok_10
+  char str[] = "\0";
+  const char delim[] = "\0";
+  ck_assert_pstr_eq(s21_strtok(str, delim), strtok(str, delim));
+
+// TO_UPPER TESTS
+
+#test test_s21_to_upper_1
+  char *str = "amor28";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, "AMOR28");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_2
+  char *str = " amor";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, " AMOR");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_3
+  char *str = "amor\n\0";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, "AMOR\n");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_4
+  char *str = " \n\0";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, " \n");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_5
+  char *str = " \0";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, " ");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_6
+  char *str = "\n\0";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, "\n");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_7
+  char *str = "\0";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, "");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_8
+  char *str = "";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, "");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_9
+  char str[] = "AMOR";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, "AMOR");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_10
+  char *str = "EL_ganador se lo lleva TODO!./,,";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, "EL_GANADOR SE LO LLEVA TODO!./,,");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_upper_11
+  char str[] = "NULL";
+  char *str_s21 = (char *)s21_to_upper(str);
+  ck_assert_str_eq(str_s21, "NULL");
+  if (str_s21) free(str_s21);
+
+// TO_LOWER TESTS
+
+#test test_s21_to_lower_1
+  char *str = "AMOR28";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, "amor28");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_2
+  char *str = " AMOR";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, " amor");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_3
+  char *str = "AMOR\n\0";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, "amor\n");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_4
+  char *str = " \n\0";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, " \n");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_5
+  char *str = " \0";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, " ");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_6
+  char *str = "\n\0";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, "\n");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_7
+  char *str = "\0";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, "");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_8
+  char *str = "";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, "");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_9
+  char str[] = "amor";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, "amor");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_10
+  char *str = "EL_GANADOR SE LO LLEVA TODO!./,,";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, "el_ganador se lo lleva todo!./,,");
+  if (str_s21) free(str_s21);
+
+#test test_s21_to_lower_11
+  char str[] = "NULL";
+  char *str_s21 = (char *)s21_to_lower(str);
+  ck_assert_str_eq(str_s21, "null");
+  if (str_s21) free(str_s21);
+
+// INSERT TESTS
+
+#test test_s21_insert_1
+  const char *str1 = {"Como"};
+  const char *str2 = {"estas"};
+  s21_size_t start_index = 2;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_str_eq(str3, "Coestasmo");
+  free(str3);
+
+#test test_s21_insert_2
+  const char str1[] = "Como\0";
+  const char str2[] = "Estas\0";
+  s21_size_t start_index = 2;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_str_eq(str3, "CoEstasmo");
+  free(str3);
+
+#test test_s21_insert_3
+  const char str1[] = "Como\0";
+  const char str2[] = "Estas\0";
+  s21_size_t start_index = 4;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_str_eq(str3, "ComoEstas");
+  free(str3);
+
+#test test_s21_insert_4
+  const char *str1 = "Como\0";
+  const char *str2 = "Estas\0";
+  s21_size_t start_index = 0;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_pstr_eq(str3, "EstasComo");
+  free(str3);
+
+#test test_s21_insert_5
+  const char *str1 = "M";
+  const char *str2 = "amor";
+  s21_size_t start_index = 1;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_str_eq(str3, "Mamor");
+  free(str3);
+
+#test test_s21_insert_6
+  const char *str1 = "M";
+  const char *str2 = "amor";
+  s21_size_t start_index = 1;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_str_eq(str3, "Mamor");
+  free(str3);
+
+#test test_s21_insert_7
+  const char *str1 = "Hello\n\0";
+  const char *str2 = "Man\n\0";
+  s21_size_t start_index = 1;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_str_eq(str3, "HMan\nello\n\0");
+  free(str3);
+
+#test test_s21_insert_8
+  const char *str1 = " s\0";
+  const char *str2 = " s\0";
+  s21_size_t start_index = 1;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_str_eq(str3, "  ss");
+  free(str3);
+
+#test test_s21_insert_9
+  const char str1[] = "\n\0";
+  const char str2[] = "\n\0";
+  s21_size_t start_index = 1;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_str_eq(str3, "\n\n");
+  free(str3);
+
+#test test_s21_insert_10
+  const char str1[] = " \0";
+  const char str2[] = " \0";
+  s21_size_t start_index = 1;
+  char *str3 = s21_insert(str1, str2, start_index);
+  ck_assert_str_eq(str3, "  ");
+  free(str3);
+
+// TRIM TESTS
+
+#test test_s21_trim_1
+  const char *src = "Comoestas";
+  const char *trim_chars = "o";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "Comoestas");
+  free(str);
+
+#test test_s21_trim_2
+  const char *src = "Comoestas";
+  const char *trim_chars = "C";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "omoestas");
+  free(str);
+
+#test test_s21_trim_3
+  const char *src = "Comoestas";
+  const char *trim_chars = "ats";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "Comoe");
+  free(str);
+
+#test test_s21_trim_4
+  const char *src = "Comoestas";
+  const char *trim_chars = " ";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(src, "Comoestas");
+  free(str);
+
+#test test_s21_trim_5
+  const char *src = "Helloworld";
+  const char *trim_chars = "world";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "He");
+  free(str);
+
+#test test_s21_trim_6
+  const char *src = "";
+  const char *trim_chars = "w";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "");
+  free(str);
+
+#test test_s21_trim_7
+  const char *src = "-Hola\n\0";
+  const char *trim_chars = "-";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "Hola\n");
+  free(str);
+
+#test test_s21_trim_8
+  const char *src = "f\0";
+  const char *trim_chars = "f";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "");
+  free(str);
+
+#test test_s21_trim_9
+  const char *src = " \0";
+  const char *trim_chars = " ";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "");
+  free(str);
+
+#test test_s21_trim_10
+  const char *src = " \n\0";
+  const char *trim_chars = "\n";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, " ");
+  free(str);
+
+#test test_s21_trim_11
+  const char *src = "";
+  const char *trim_chars = "";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "");
+  free(str);
+
+#test test_s21_trim_12
+  const char *src = "Comoestas";
+  const char *trim_chars = "Comoestas";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "");
+  free(str);
+
+#test test_s21_trim_13
+  const char *src = "  Comoestas    ";
+  const char *trim_chars = " ";
+  char *str = s21_trim(src, trim_chars);
+  ck_assert_pstr_eq(str, "Comoestas");
+  free(str);
